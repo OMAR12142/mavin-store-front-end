@@ -1,7 +1,7 @@
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { FaTimes } from "react-icons/fa";
-import { useGetAllOrdersQuery } from "../../slices/ordersApiSlice";
+import { useGetAllOrdersQuery } from "../../slices/ordersApiSlice.js";
 import { Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
