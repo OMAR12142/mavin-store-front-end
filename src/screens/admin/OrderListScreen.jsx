@@ -53,8 +53,7 @@ const OrderListScreen = () => {
                             {order._id}
                           </span>
                         </td>
-<td>{order.user ? order.user.name : 'DELETED USER'}</td>                        <td>{order.createdAt.substring(0, 10)}</td>
-                        <td className="fw-bold">
+<td>{order.user?.name || 'DELETED USER'}</td>                        <td className="fw-bold">
                           ${order.totalPrice.toFixed(2)}
                         </td>
                         <td>
@@ -105,10 +104,7 @@ const OrderListScreen = () => {
                             <p className="mb-2 text-truncate">{order._id}</p>
 
                             <small className="text-muted">USER</small>
-<p className="mb-2">
-  {order.user ? order.user.name : 'DELETED USER'}
-</p>
-                            <small className="text-muted">DATE</small>
+<p className="mb-2">{order.user?.name || 'DELETED USER'}</p>                            <small className="text-muted">DATE</small>
                             <p className="mb-0">
                               {order.createdAt.substring(0, 10)}
                             </p>
@@ -186,8 +182,7 @@ const OrderListScreen = () => {
                         <div className="row mb-2">
                           <div className="col-6">
                             <small className="text-muted d-block">USER</small>
-                            <small>{order.user.name}</small>
-                          </div>
+<small>{order.user?.name || 'DELETED USER'}</small>                          </div>
                           <div className="col-6">
                             <small className="text-muted d-block">DATE</small>
                             <small>{order.createdAt.substring(0, 10)}</small>
