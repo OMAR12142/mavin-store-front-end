@@ -1,8 +1,4 @@
-/* ========================================= */
-/* CSS VARIABLES & GLOBAL STYLES */
-/* ========================================= */
 :root {
-  /* Colors */
   --color-dark-primary: #1a1a1a;
   --color-dark-hover: #333333;
   --color-red-danger: #cc0000;
@@ -441,9 +437,6 @@ a:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* ========================================= */
-/* RESPONSIVE STYLES */
-/* ========================================= */
 
 @media (max-width: 768px) {
   .app-checkout-steps {
@@ -570,7 +563,6 @@ a:hover {
   background: rgba(26, 26, 26, 0.05);
 }
 
-/* User Dropdown */
 .app-user-dropdown .dropdown-toggle,
 .app-admin-dropdown .dropdown-toggle {
   background: transparent !important;
@@ -964,11 +956,6 @@ a {
 
 
 
-/* ========================================= */
-/* HEADER RESPONSIVE STYLES */
-/* ========================================= */
-
-/* Large devices (lg) - 992px and up */
 @media (min-width: 992px) {
   .app-nav-items {
     gap: 1rem;
@@ -979,7 +966,6 @@ a {
   }
 }
 
-/* Medium devices (md) - 768px to 991px */
 @media (max-width: 991px) and (min-width: 768px) {
   .app-navbar-custom .container {
     max-width: 100%;
@@ -996,7 +982,6 @@ a {
   }
 }
 
-/* Small devices (sm) - 576px to 767px */
 @media (max-width: 767px) and (min-width: 576px) {
   .app-logo-img {
     height: 30px;
@@ -1021,7 +1006,6 @@ a {
   }
 }
 
-/* Extra small devices (xs) - 575px and down */
 @media (max-width: 575px) {
   .app-navbar-custom {
     padding: 0.3rem 0;
