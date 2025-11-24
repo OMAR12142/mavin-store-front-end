@@ -93,7 +93,7 @@ const OrderListScreen = () => {
               </div>
             </div>
 
-            <div className="d-none d-md-block d-lg-none">
+            <div className=" d-md-block d-lg-none">
               <div className="row g-3 p-3">
                 {orders.map((order) => (
                   <div key={order._id} className="col-12">
@@ -105,8 +105,9 @@ const OrderListScreen = () => {
                             <p className="mb-2 text-truncate">{order._id}</p>
 
                             <small className="text-muted">USER</small>
-                            <p className="mb-2">{order.user.name}</p>
-
+<p className="mb-2">
+  {order.user ? order.user.name : 'DELETED USER'}
+</p>
                             <small className="text-muted">DATE</small>
                             <p className="mb-0">
                               {order.createdAt.substring(0, 10)}
@@ -185,7 +186,8 @@ const OrderListScreen = () => {
                         <div className="row mb-2">
                           <div className="col-6">
                             <small className="text-muted d-block">USER</small>
-<small>{order.user ? order.user.name : 'DELETED USER'}</small>                          </div>
+                            <small>{order.user.name}</small>
+                          </div>
                           <div className="col-6">
                             <small className="text-muted d-block">DATE</small>
                             <small>{order.createdAt.substring(0, 10)}</small>
