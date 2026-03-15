@@ -734,7 +734,7 @@ a:hover {
 
 /* ---------- Hero Section ---------- */
 .app-hero-section {
-  background: black;
+  background: linear-gradient(135deg, #000000 100%, #000000 100%, #000000 100%);
   border-radius: 0 0 2.5rem 2.5rem;
   position: relative;
   overflow: hidden;
