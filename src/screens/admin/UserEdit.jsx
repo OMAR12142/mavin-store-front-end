@@ -3,7 +3,8 @@ import {
   useGetUserDetailsQuery,
   useUpdateUserMutation,
 } from "../../slices/usersApiSlice";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Card } from "react-bootstrap";
+import { motion } from "framer-motion";
 import Message from "../../components/Message";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -40,7 +41,7 @@ export const UserEdit = () => {
     e.preventDefault();
     try {
       await updateuser({ userId, name, email, isAdmin }).unwrap();
-      toast.success("user updated successfully");
+      toast.success("User updated successfully");
       refetch();
       navigate("/admin/userlist");
     } catch (err) {
@@ -51,57 +52,77 @@ export const UserEdit = () => {
   return (
     <>
       <Link to="/admin/userlist" className="btn btn-light my-3 app-go-back-btn">
-        go back
+        Go Back
       </Link>
-      <FormContainer className="app-auth-container-custom">
-        <h1 className="app-auth-heading">Edit user</h1>
-        {loadingUpdate && <Loader />}
-        {isLoading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant="danger">
-            {error?.data?.message || error.error}
-          </Message>
-        ) : (
-          <Form onSubmit={submitHandler}>
-            <Form.Group controlId="name" className="my-2">
-              <Form.Label className="fw-bold">Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="app-form-control-custom"
-              />
-            </Form.Group>
-            <Form.Group controlId="email" className="my-2">
-              <Form.Label className="fw-bold">Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="app-form-control-custom"
-              />
-            </Form.Group>
-            <Form.Group controlId="isadmin" className="my-2">
-              <Form.Check
-                type="checkbox"
-                label="Is Admin"
-                checked={isAdmin}
-                onChange={(e) => setIsAdmin(e.target.checked)}
-                className="app-checkbox-custom"
-              />
-            </Form.Group>
-            <Button
-              type="submit"
-              variant="primary"
-              className="my-2 w-100 app-auth-btn-custom"
-            >
-              Update
-            </Button>
-          </Form>
-        )}
+      <FormContainer>
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+        >
+          <Card className="border-0 shadow-lg" style={{ borderRadius: '20px', overflow: 'hidden' }}>
+            <Card.Header className="py-4 text-center" style={{ background: '#000' }}>
+              <h2 className="mb-0" style={{ color: '#D4AF37', fontFamily: "'Outfit', sans-serif" }}>Edit User</h2>
+            </Card.Header>
+            <Card.Body className="p-4 px-lg-5">
+              {loadingUpdate && <Loader />}
+              {isLoading ? (
+                <Loader />
+              ) : error ? (
+                <Message variant="danger">
+                  {error?.data?.message || error.error}
+                </Message>
+              ) : (
+                <Form onSubmit={submitHandler}>
+                  <Form.Group controlId="name" className="mb-4">
+                    <Form.Label className="fw-bold small text-uppercase">Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Enter name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="app-form-control-custom"
+                    />
+                  </Form.Group>
+
+                  <Form.Group controlId="email" className="mb-4">
+                    <Form.Label className="fw-bold small text-uppercase">Email</Form.Label>
+                    <Form.Control
+                      type="email"
+                      placeholder="Enter email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="app-form-control-custom"
+                    />
+                  </Form.Group>
+
+                  <Form.Group controlId="isadmin" className="mb-5">
+                    <div className="d-flex align-items-center gap-3 p-3 rounded" style={{ background: '#F8F9FA', border: '1px solid rgba(0,0,0,0.06)' }}>
+                        <Form.Check
+                            type="checkbox"
+                            id="custom-switch"
+                            label={<span className="fw-bold small text-uppercase">Grant Admin Privileges</span>}
+                            checked={isAdmin}
+                            onChange={(e) => setIsAdmin(e.target.checked)}
+                            className="app-checkbox-custom"
+                        />
+                    </div>
+                  </Form.Group>
+
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button
+                      type="submit"
+                      className="w-100 app-auth-btn-custom py-3"
+                      style={{ borderRadius: '15px', fontWeight: '800' }}
+                    >
+                      UPDATE USER
+                    </Button>
+                  </motion.div>
+                </Form>
+              )}
+            </Card.Body>
+          </Card>
+        </motion.div>
       </FormContainer>
     </>
   );

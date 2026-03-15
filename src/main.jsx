@@ -10,13 +10,13 @@ import "./assets/styles/index.css";
 import "./assets/styles/bootstrap.custom.css";
 
 import App from "./App.jsx";
-import { Homescreen } from "./screens/Homescreen.jsx";
+import Homescreen from "./screens/Homescreen.jsx";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import { SingleProductScreen } from "./screens/SingleProductScreen.jsx";
+import SingleProductScreen from "./screens/SingleProductScreen.jsx";
 import { Provider } from "react-redux";
-import { CartScreen } from "./screens/CartScreen.jsx";
-import { Login } from "./screens/Login.jsx";
-import { Register } from "./screens/Register.jsx";
+import CartScreen from "./screens/CartScreen.jsx";
+import Login from "./screens/Login.jsx";
+import Register from "./screens/Register.jsx";
 import ShippingScreen from "./screens/ShippingScreen.jsx";
 import PrivteRoute from "./components/PrivteRoute.jsx";
 import PaymentScreen from "./screens/PaymentScreen.jsx";
@@ -26,10 +26,10 @@ import Profile from "./screens/Profile.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
 import OrderListScreen from "./screens/admin/OrderListScreen.jsx";
 import ProductsScreen from "./screens/admin/ProductsScreen.jsx";
-import { ProductEditScreen } from "./screens/admin/ProductEditScreen.jsx";
+import ProductEditScreen from "./screens/admin/ProductEditScreen.jsx";
 import UserListScreen from "./screens/admin/UserListScreen.jsx";
 import UserEdit from "./screens/admin/UserEdit.jsx";
-import { AllProductsScreen } from "./screens/AllProductsScreen.jsx";
+import AllProductsScreen from "./screens/AllProductsScreen.jsx";
 import { StrictMode } from "react";
 
 const router = createBrowserRouter(

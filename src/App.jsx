@@ -20,17 +20,20 @@ function App() {
 
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop={true}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
-        style={{
-          zIndex: 9999,
+        theme="dark"
+        toastStyle={{ 
+          borderRadius: '16px', 
+          background: '#000', 
+          color: '#fff',
+          border: '1px solid #D4AF37'
         }}
       />
     </div>

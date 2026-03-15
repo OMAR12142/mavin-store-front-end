@@ -1,20 +1,19 @@
-import { Spinner } from "react-bootstrap";
-
-import React from "react";
+import { motion } from "framer-motion";
 
 function Loader() {
   return (
-    <div>
-      <Spinner
-        animation="border"
-        role="status"
+    <div className="d-flex justify-content-center align-items-center py-4">
+      <motion.div
         style={{
-          width: "100px",
-          height: "100px",
-          margin: "auto",
-          display: "block",
+          width: "48px",
+          height: "48px",
+          borderRadius: "50%",
+          border: "3px solid rgba(212, 175, 55, 0.15)",
+          borderTop: "3px solid #D4AF37",
         }}
-      ></Spinner>
+        animate={{ rotate: 360 }}
+        transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+      />
     </div>
   );
 }

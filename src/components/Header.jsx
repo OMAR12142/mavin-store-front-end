@@ -1,5 +1,6 @@
 import { Navbar, Nav, Container, Badge, NavDropdown } from "react-bootstrap";
 import { FaUser, FaShoppingCart } from "react-icons/fa";
+import { motion } from "framer-motion";
 import nav_logo from "../assets/nav_logo.png";
 import { useNavigate } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
@@ -40,11 +41,13 @@ const Header = () => {
         <Container fluid className="px-3 px-sm-4 px-lg-5">
           <LinkContainer to="/">
             <Navbar.Brand className="app-logo-text text-decoration-none d-flex align-items-center">
-              <img
+              <motion.img
                 src={nav_logo}
-                alt=" Logo"
+                alt="MAVIN Logo"
                 className="me-2 app-logo-img"
                 style={{ height: "35px" }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
               />
             </Navbar.Brand>
           </LinkContainer>
@@ -88,18 +91,25 @@ const Header = () => {
                     <FaShoppingCart className="app-cart-icon fs-5" />
                     <strong className="app-cart-text fs-6 fs-lg-5">Cart</strong>
                     {cartItems.length > 0 && (
-                      <Badge
-                        pill
-                        className="app-cart-badge bg-black position-absolute top-0 start-100 translate-middle d-flex align-items-center justify-content-center"
-                        style={{
-                          minWidth: "20px",
-                          height: "20px",
-                          fontSize: "0.7rem",
-                          padding: "0",
-                        }}
+                      <motion.div
+                        key={cartItems.reduce((a, c) => a + c.quantity, 0)}
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       >
-                        {cartItems.reduce((a, c) => a + c.quantity, 0)}
-                      </Badge>
+                        <Badge
+                          pill
+                          className="app-cart-badge position-absolute top-0 start-100 translate-middle d-flex align-items-center justify-content-center"
+                          style={{
+                            minWidth: "20px",
+                            height: "20px",
+                            fontSize: "0.7rem",
+                            padding: "0",
+                          }}
+                        >
+                          {cartItems.reduce((a, c) => a + c.quantity, 0)}
+                        </Badge>
+                      </motion.div>
                     )}
                   </div>
                 </Nav.Link>

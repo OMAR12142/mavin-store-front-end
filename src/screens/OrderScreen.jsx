@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-// import { useGetOrderDetailsQuery } from "../slices/ordersApiSlice";
+import { motion } from "framer-motion";
 import Loader from "../components/Loader";
 import Message from "./../components/Message";
 import {
@@ -17,13 +17,11 @@ import {
   ListGroup,
   ListGroupItem,
   Row,
+  Badge,
 } from "react-bootstrap";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
-// import { usePayOrderMutation } from "../slices/ordersApiSlice";
 import { useSelector } from "react-redux";
-// import { useGetPayPalClientIdQuery } from "../slices/ordersApiSlice";
 import { toast } from "react-toastify";
-// import { useDeliverOrderMutation } from "../slices/ordersApiSlice";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -58,8 +56,8 @@ const OrderScreen = () => {
             "client-id": paypal.clientId,
             currency: "USD",
           },
-        }),
-          paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+        });
+        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
       };
       if (order && !order.isPaid) {
         if (!window.paypal) {
@@ -74,20 +72,23 @@ const OrderScreen = () => {
       try {
         await payOrder({ orderId, details }).unwrap();
         refetch();
-        toast.success("payment successfull");
+        toast.success("Payment successful");
       } catch (err) {
-        toast.error(err?.data.message || err.message);
+        toast.error(err?.data?.message || err.message);
       }
     });
   }
+
   async function onApproveTest() {
     await payOrder({ orderId, details: { payer: {} } });
     refetch();
-    toast.success("payment successfull");
+    toast.success("Payment successful");
   }
+
   function onError(err) {
     toast.error(err.message);
   }
+
   function createOrder(data, actions) {
     return actions.order
       .create({
@@ -117,144 +118,142 @@ const OrderScreen = () => {
   return isLoading ? (
     <Loader />
   ) : error ? (
-    <Message variant="danger" />
+    <Message variant="danger">{error?.data?.message || error.error}</Message>
   ) : (
-    <>
-      <h1 className="app-order-id-heading">ORDER ID: {order._id}</h1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h1 className="app-order-id-heading mb-4" style={{ color: "#888", fontSize: '1rem' }}>
+        ORDER ID: <span className="text-black fw-bold">{order._id}</span>
+      </h1>
       <Row className="app-order-details-row">
         <Col md={8}>
-          <ListGroup variant="flush" className="app-order-info-list">
-            <ListGroupItem className="app-order-section-item">
-              <h2 className="app-section-heading">Shipping</h2>
-              <p className="mb-1">
-                <strong className="fw-bold">Name: </strong>
-                {order.user.name}
-              </p>
-              <p className="mb-1">
-                <strong className="fw-bold">Email: </strong>
-                <a
-                  href={`mailto:${order.user.email}`}
-                  className="app-link-primary"
-                >
-                  {order.user.email}
-                </a>
-              </p>
-              <p className="mb-3">
-                <strong className="fw-bold">Address: </strong>
-                {order.shippingAddress.address}, {order.shippingAddress.city},
-                {order.shippingAddress.country}
-              </p>
-              <div>
-                {order.isDelivered ? (
-                  <Message variant="success" className="app-status-message">
-                    Delivered on: {order.deliveredAt.substring(0, 10)}
-                  </Message>
-                ) : (
-                  <Message variant="danger" className="app-status-message">
-                    Not Delivered
-                  </Message>
-                )}
+          <ListGroup variant="flush" className="app-order-info-list gap-4">
+            <ListGroupItem className="app-order-section-item p-4 shadow-sm border-0" style={{ borderRadius: '20px', background: '#fff' }}>
+              <h2 className="app-section-heading mb-4" style={{ fontFamily: "'Outfit', sans-serif" }}>Shipping</h2>
+              <div className="p-3 rounded mb-3" style={{ background: '#F8F9FA' }}>
+                <p className="mb-2">
+                  <strong className="text-black">Name: </strong>
+                  {order.user.name}
+                </p>
+                <p className="mb-2">
+                  <strong className="text-black">Email: </strong>
+                  <a href={`mailto:${order.user.email}`} className="text-decoration-none" style={{ color: '#D4AF37' }}>
+                    {order.user.email}
+                  </a>
+                </p>
+                <p className="mb-0">
+                  <strong className="text-black">Address: </strong>
+                  {order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.country}
+                </p>
               </div>
+              {order.isDelivered ? (
+                <Message variant="success">
+                  Delivered on: {new Date(order.deliveredAt).toLocaleString()}
+                </Message>
+              ) : (
+                <Message variant="danger">Not Delivered</Message>
+              )}
             </ListGroupItem>
 
-            <ListGroupItem className="app-order-section-item">
-              <h2 className="app-section-heading">Payment Method</h2>
-              <p className="mb-1 fw-bold">Method: {order.paymentMethod}</p>
-              <div>
-                {order.isPaid ? (
-                  <Message variant="success" className="app-status-message">
-                    Paid on: {order.paidAt.substring(0, 10)}
-                  </Message>
-                ) : (
-                  <Message variant="danger" className="app-status-message">
-                    Not Paid
-                  </Message>
-                )}
+            <ListGroupItem className="app-order-section-item p-4 shadow-sm border-0" style={{ borderRadius: '20px', background: '#fff' }}>
+              <h2 className="app-section-heading mb-4" style={{ fontFamily: "'Outfit', sans-serif" }}>Payment</h2>
+              <div className="p-3 rounded mb-3" style={{ background: '#F8F9FA' }}>
+                <p className="mb-0">
+                  <strong className="text-black">Method: </strong> {order.paymentMethod}
+                </p>
               </div>
+              {order.isPaid ? (
+                <Message variant="success">
+                  Paid on: {new Date(order.paidAt).toLocaleString()}
+                </Message>
+              ) : (
+                <Message variant="danger">Not Paid</Message>
+              )}
             </ListGroupItem>
 
-            <ListGroupItem className="app-order-section-item">
-              <h2 className="app-section-heading">Order Items</h2>
-              {order.orderItems.map((item, index) => (
-                <ListGroup.Item
-                  key={index}
-                  className="app-order-item-list-item"
-                >
-                  <Row className="align-items-center">
-                    <Col md={1}>
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fluid
-                        rounded
-                        className="app-item-image"
-                      />
-                    </Col>
-                    <Col className="fw-bold">
-                      <Link
-                        to={`/products/${item.product}`}
-                        className="app-link-primary"
-                      >
-                        {item.name}
-                      </Link>
-                    </Col>
-                    <Col md={4} className="text-end fw-bold">
-                      {item.quantity} x ${item.price} ={" "}
-                      <span className="app-item-total-price">
-                        ${(item.quantity * item.price).toFixed(2)}
-                      </span>
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
+            <ListGroupItem className="app-order-section-item p-4 shadow-sm border-0" style={{ borderRadius: '20px', background: '#fff' }}>
+              <h2 className="app-section-heading mb-4" style={{ fontFamily: "'Outfit', sans-serif" }}>Order Items</h2>
+              <ListGroup variant="flush">
+                {order.orderItems.map((item, index) => (
+                  <ListGroupItem key={index} className="py-3 px-0 border-0">
+                    <Row className="align-items-center">
+                      <Col md={2}>
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fluid
+                          rounded
+                          style={{ borderRadius: '12px' }}
+                        />
+                      </Col>
+                      <Col>
+                        <Link to={`/products/${item.product}`} className="text-decoration-none fw-semibold" style={{ color: '#000' }}>
+                          {item.name}
+                        </Link>
+                      </Col>
+                      <Col md={4} className="text-end fw-bold" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                        {item.quantity} x ${item.price} = <span style={{ color: '#D4AF37' }}>${(item.quantity * item.price).toFixed(2)}</span>
+                      </Col>
+                    </Row>
+                  </ListGroupItem>
+                ))}
+              </ListGroup>
             </ListGroupItem>
           </ListGroup>
         </Col>
+
         <Col md={4}>
-          <Card className="app-summary-card shadow-lg border-0">
+          <Card className="app-summary-card border-0 shadow-lg" style={{ borderRadius: '20px', overflow: 'hidden' }}>
             <ListGroup variant="flush">
-              <ListGroupItem className="app-summary-header">
-                <h2 className="app-section-heading mb-0">Order Summary</h2>
+              <ListGroupItem className="app-summary-header text-center py-4" style={{ background: '#000' }}>
+                <h2 className="app-section-heading mb-0" style={{ color: '#D4AF37', fontFamily: "'Outfit', sans-serif" }}>Order Summary</h2>
               </ListGroupItem>
-              <ListGroupItem className="app-summary-item">
+              <ListGroupItem className="py-3">
                 <Row>
-                  <Col className="fw-bold">Items Price:</Col>
-                  <Col className="text-end">${order.itemsPrice}</Col>
+                  <Col className="fw-bold">Items:</Col>
+                  <Col className="text-end fw-bold">${order.itemsPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroupItem>
-              <ListGroupItem className="app-summary-item">
+              <ListGroupItem className="py-3">
                 <Row>
                   <Col className="fw-bold">Shipping:</Col>
-                  <Col className="text-end">${order.shippingPrice}</Col>
+                  <Col className="text-end fw-bold">${order.shippingPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroupItem>
-              <ListGroupItem className="app-summary-item">
+              <ListGroupItem className="py-3">
                 <Row>
                   <Col className="fw-bold">Tax:</Col>
-                  <Col className="text-end">${order.taxPrice}</Col>
+                  <Col className="text-end fw-bold">${order.taxPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroupItem>
-              <ListGroupItem className="app-summary-total-item">
+              <ListGroupItem className="py-4" style={{ background: '#F8F9FA' }}>
                 <Row>
-                  <Col className="fw-bold app-final-total-text">Total:</Col>
-                  <Col className="text-end fw-bold app-final-total-price">
-                    ${order.totalPrice}
+                  <Col className="fw-bold fs-5">Total:</Col>
+                  <Col className="text-end fw-bold fs-5" style={{ color: '#D4AF37' }}>
+                    ${order.totalPrice.toFixed(2)}
                   </Col>
                 </Row>
               </ListGroupItem>
+
               {!order.isPaid && (
-                <ListGroupItem className="app-paypal-section">
+                <ListGroupItem className="p-4">
                   {loadingPay && <Loader />}
                   {isPending ? (
                     <Loader />
                   ) : (
-                    <div>
-                      <Button
-                        onClick={onApproveTest}
-                        className="w-100 mb-2 app-test-pay-btn"
-                      >
-                        Test Pay Order
-                      </Button>
+                    <div className="d-grid gap-3">
+                      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                        <Button
+                          onClick={onApproveTest}
+                          className="w-100 app-auth-btn-custom py-3"
+                          style={{ borderRadius: '15px' }}
+                        >
+                          TEST PAY ORDER
+                        </Button>
+                      </motion.div>
                       <PayPalButtons
                         onError={onError}
                         createOrder={createOrder}
@@ -264,26 +263,27 @@ const OrderScreen = () => {
                   )}
                 </ListGroupItem>
               )}
+
               {loadingDeliver && <Loader />}
-              {userInfo &&
-                userInfo.isAdmin &&
-                order.isPaid &&
-                !order.isDelivered && (
-                  <ListGroup.Item className="app-deliver-section">
+              {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                <ListGroupItem className="p-4 border-0">
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button
                       type="button"
-                      className="w-100 app-deliver-btn"
+                      className="w-100 app-auth-btn-custom py-3"
+                      style={{ borderRadius: '15px' }}
                       onClick={DeliverOrderHandler}
                     >
-                      Mark As Delivered
+                      MARK AS DELIVERED
                     </Button>
-                  </ListGroup.Item>
-                )}
+                  </motion.div>
+                </ListGroupItem>
+              )}
             </ListGroup>
           </Card>
         </Col>
       </Row>
-    </>
+    </motion.div>
   );
 };
 

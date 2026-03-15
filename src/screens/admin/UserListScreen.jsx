@@ -1,7 +1,7 @@
 import React from "react";
 import Message from "../../components/Message";
 import { FaTimes, FaTrash, FaEdit, FaCheck, FaEnvelope } from "react-icons/fa";
-import { Button } from "react-bootstrap";
+import { Button, Table, Card } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import {
   useDeleteUserMutation,
@@ -9,6 +9,7 @@ import {
 } from "../../slices/usersApiSlice";
 import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
+import { motion } from "framer-motion";
 
 const UserListScreen = () => {
   const { data: users, isLoading, error, refetch } = useGetusersQuery();
@@ -16,7 +17,7 @@ const UserListScreen = () => {
   const [deleteUser, { isLoading: loadingDelete }] = useDeleteUserMutation();
 
   const deleteHandler = async (id) => {
-    if (window.confirm("Are you sure to delete the user")) {
+    if (window.confirm("Are you sure you want to delete this user?")) {
       try {
         await deleteUser(id).unwrap();
         refetch();
@@ -28,263 +29,103 @@ const UserListScreen = () => {
   };
 
   return (
-    <div className="container-fluid px-3 px-md-4 px-lg-5 py-4">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="container-fluid px-3 px-md-4 px-lg-5 py-4"
+    >
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="h2 mb-0 fw-bold text-black">Users</h1>
+        <h1 className="fw-bold text-black" style={{ fontFamily: "'Outfit', sans-serif", letterSpacing: '-0.02em' }}>
+          User Management
+        </h1>
       </div>
-      {loadingDelete && (
-        <div className="d-flex justify-content-center py-3">
-          <Loader />
-        </div>
-      )}
+
+      {loadingDelete && <Loader />}
+      
       {isLoading ? (
-        <div className="d-flex justify-content-center py-5">
-          <Loader />
-        </div>
+        <Loader />
       ) : error ? (
-        <div className="row justify-content-center">
-          <div className="col-12 col-md-10 col-lg-8">
-            <Message />
-          </div>
-        </div>
+        <Message variant="danger">{error?.data?.message || error.error}</Message>
       ) : (
-        <div className="card shadow-sm border-0">
-          <div className="card-body p-0">
-            <div className="d-none d-lg-block">
-              <div className="table-responsive">
-                <table className="table table-striped table-hover align-middle mb-0">
-                  <thead className="table-black">
-                    <tr>
-                      <th className="ps-3">ID</th>
-                      <th>USER</th>
-                      <th>EMAIL</th>
-                      <th>ADMIN</th>
-                      <th className="text-center pe-3">ACTIONS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.map((user) => (
-                      <tr key={user._id}>
-                        <td className="ps-3">
-                          <span
-                            className="text-truncate d-inline-block"
-                            style={{ maxWidth: "120px" }}
-                          >
-                            {user._id}
+        <Card className="border-0 shadow-lg" style={{ borderRadius: '20px', overflow: 'hidden' }}>
+          <Card.Header className="py-4 px-4 border-0" style={{ background: '#000' }}>
+            <h5 className="mb-0 fw-bold" style={{ color: '#D4AF37', fontFamily: "'Outfit', sans-serif" }}>Registered Users</h5>
+          </Card.Header>
+          <Card.Body className="p-0">
+            <div className="table-responsive">
+              <Table hover borderless className="app-orders-table mb-0 align-middle">
+                <thead style={{ background: '#F8F9FA' }}>
+                  <tr>
+                    <th className="py-3 px-4 text-uppercase small fw-bold">ID</th>
+                    <th className="py-3 px-4 text-uppercase small fw-bold">Name</th>
+                    <th className="py-3 px-4 text-uppercase small fw-bold">Email</th>
+                    <th className="py-3 px-4 text-uppercase small fw-bold text-center">Admin Status</th>
+                    <th className="py-3 px-4 text-uppercase small fw-bold text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr key={user._id} style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+                      <td className="py-3 px-4 fw-mono small">
+                        {user._id.substring(0, 12)}...
+                      </td>
+                      <td className="py-3 px-4 fw-semibold">
+                        {user.name}
+                      </td>
+                      <td className="py-3 px-4">
+                        <a
+                          href={`mailto:${user.email}`}
+                          className="text-decoration-none d-flex align-items-center"
+                          style={{ color: '#D4AF37' }}
+                        >
+                          <FaEnvelope className="me-2" style={{ opacity: 0.7 }} />
+                          <span>{user.email}</span>
+                        </a>
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        {user.isAdmin ? (
+                          <span className="badge bg-black text-white px-3 py-2" style={{ borderRadius: '8px' }}>
+                            <FaCheck className="me-1 text-gold" style={{ color: '#D4AF37' }} /> ADMIN
                           </span>
-                        </td>
-                        <td>
-                          <span className="fw-semibold">{user.name}</span>
-                        </td>
-                        <td>
-                          <a
-                            href={`mailto:${user.email}`}
-                            className="text-decoration-none d-flex align-items-center"
-                          >
-                            <FaEnvelope className="me-2 text-muted" />
-                            <span className="text-primary">{user.email}</span>
-                          </a>
-                        </td>
-                        <td>
-                          {user.isAdmin ? (
-                            <span
-                              className="badge bg-danger d-flex align-items-center"
-                              style={{ width: "fit-content" }}
-                            >
-                              <FaCheck className="me-1" />
-                              Admin
-                            </span>
-                          ) : (
-                            <span
-                              className="badge bg-secondary d-flex align-items-center"
-                              style={{ width: "fit-content" }}
-                            >
-                              <FaTimes className="me-1" />
-                              User
-                            </span>
-                          )}
-                        </td>
-                        <td className="text-center pe-3">
-                          <div className="d-flex justify-content-center gap-2">
-                            <LinkContainer to={`/admin/user/${user._id}/edit`}>
-                              <Button
-                                variant="outline-primary bg-black text-white"
-                                size="sm"
-                                className="px-3"
-                              >
-                                <FaEdit className="me-1" />
-                                Edit
+                        ) : (
+                          <span className="badge bg-secondary px-3 py-2 text-white" style={{ borderRadius: '8px', opacity: 0.6 }}>
+                            <FaTimes className="me-1" /> USER
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-end">
+                        <div className="d-flex justify-content-end gap-2">
+                          <LinkContainer to={`/admin/user/${user._id}/edit`}>
+                            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                              <Button variant="light" size="sm" className="shadow-sm" style={{ borderRadius: '8px' }}>
+                                <FaEdit color="#000" />
                               </Button>
-                            </LinkContainer>
+                            </motion.div>
+                          </LinkContainer>
+                          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                             <Button
-                              variant="outline-danger"
+                              variant="light"
                               size="sm"
-                              className="px-3"
+                              className="shadow-sm"
+                              style={{ borderRadius: '8px' }}
                               onClick={() => deleteHandler(user._id)}
                               disabled={loadingDelete}
                             >
-                              <FaTrash />
+                              <FaTrash color="#ef4444" />
                             </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          </motion.div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </div>
-
-            <div className="d-none d-md-block d-lg-none">
-              <div className="row g-3 p-3">
-                {users.map((user) => (
-                  <div key={user._id} className="col-12 col-sm-6">
-                    <div className="card border shadow-sm h-100">
-                      <div className="card-body">
-                        <div className="d-flex justify-content-between align-items-start mb-3">
-                          <div className="flex-grow-1 me-3">
-                            <h6 className="card-title mb-1">{user.name}</h6>
-                            <small className="text-muted text-truncate d-block">
-                              ID: {user._id}
-                            </small>
-                          </div>
-                          <div>
-                            {user.isAdmin ? (
-                              <span className="badge bg-danger d-flex align-items-center">
-                                <FaCheck className="me-1" />
-                                Admin
-                              </span>
-                            ) : (
-                              <span className="badge bg-secondary d-flex align-items-center">
-                                <FaTimes className="me-1" />
-                                User
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="mb-3">
-                          <small className="text-muted d-block mb-1">
-                            Email
-                          </small>
-                          <a
-                            href={`mailto:${user.email}`}
-                            className="text-decoration-none d-flex align-items-center"
-                          >
-                            <FaEnvelope className="me-2 text-muted" />
-                            <span className="text-primary text-truncate">
-                              {user.email}
-                            </span>
-                          </a>
-                        </div>
-
-                        <div className="d-flex gap-2">
-                          <LinkContainer
-                            to={`/admin/user/${user._id}/edit`}
-                            className="flex-fill"
-                          >
-                            <Button
-                              variant="outline-primary bg-black text-white"
-                              size="sm"
-                              className="w-100"
-                            >
-                              <FaEdit className="me-1" />
-                              Edit
-                            </Button>
-                          </LinkContainer>
-                          <Button
-                            variant="outline-danger"
-                            size="sm"
-                            className="flex-fill"
-                            onClick={() => deleteHandler(user._id)}
-                            disabled={loadingDelete}
-                          >
-                            <FaTrash className="me-1" />
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="d-block d-md-none">
-              <div className="row g-2 p-2">
-                {users.map((user) => (
-                  <div key={user._id} className="col-12">
-                    <div className="card border shadow-sm">
-                      <div className="card-body p-3">
-                        <div className="d-flex justify-content-between align-items-start mb-2">
-                          <div className="flex-grow-1 me-2">
-                            <h6 className="card-title mb-1">{user.name}</h6>
-                            <small className="text-muted text-truncate d-block">
-                              ID: {user._id}
-                            </small>
-                          </div>
-                          <div>
-                            {user.isAdmin ? (
-                              <span className="badge bg-success">
-                                <FaCheck className="me-1" />
-                                Admin
-                              </span>
-                            ) : (
-                              <span className="badge bg-secondary">
-                                <FaTimes className="me-1" />
-                                User
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="mb-3">
-                          <small className="text-muted d-block mb-1">
-                            Email
-                          </small>
-                          <a
-                            href={`mailto:${user.email}`}
-                            className="text-decoration-none d-flex align-items-center"
-                          >
-                            <FaEnvelope className="me-2 text-muted" />
-                            <span className="text-primary text-truncate">
-                              {user.email}
-                            </span>
-                          </a>
-                        </div>
-
-                        <div className="d-flex gap-2">
-                          <LinkContainer
-                            to={`/admin/userlist/${user._id}/edit`}
-                            className="flex-fill"
-                          >
-                            <Button
-                              variant="outline-primary"
-                              size="sm"
-                              className="w-100"
-                            >
-                              <FaEdit />
-                            </Button>
-                          </LinkContainer>
-                          <Button
-                            variant="outline-danger"
-                            size="sm"
-                            className="flex-fill "
-                            onClick={() => deleteHandler(user._id)}
-                            disabled={loadingDelete}
-                          >
-                            <FaTrash />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+          </Card.Body>
+        </Card>
       )}
-    </div>
+    </motion.div>
   );
 };
 

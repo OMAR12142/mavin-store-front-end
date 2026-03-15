@@ -1,11 +1,11 @@
-import React from "react";
 import { useState } from "react";
-import { FormContainer } from "../components/FormContainer";
-import { Button, Form, FormGroup } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { saveShippingAddress } from "../slices/cartSlice";
+import { motion } from "framer-motion";
+import { FormContainer } from "../components/FormContainer";
 import CheckoutSteps from "../components/CheckoutSteps";
+import { useDispatch, useSelector } from "react-redux";
+import { saveShippingAddress } from "../slices/cartSlice";
 
 const ShippingScreen = () => {
   const cart = useSelector((state) => state.cart);
@@ -13,9 +13,7 @@ const ShippingScreen = () => {
 
   const [address, setAddress] = useState(shippingAddress?.address || "");
   const [city, setCity] = useState(shippingAddress?.city || "");
-  const [postalCode, setPostalCode] = useState(
-    shippingAddress?.postalCode || ""
-  );
+  const [postalCode, setPostalCode] = useState(shippingAddress?.postalCode || "");
   const [country, setCountry] = useState(shippingAddress?.country || "");
 
   const dispatch = useDispatch();
@@ -23,70 +21,80 @@ const ShippingScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("submit");
-    dispatch(saveShippingAddress({ address, postalCode, city, country }));
+    dispatch(saveShippingAddress({ address, city, postalCode, country }));
     navigate("/payment");
   };
 
   return (
-    <FormContainer className="app-auth-container-custom">
+    <>
       <CheckoutSteps step1 step2 />
-
-      <h1 className="app-auth-heading">Shipping</h1>
-      <Form onSubmit={submitHandler}>
-        <FormGroup controlId="address" className="my-2">
-          <Form.Label className="fw-bold">Address</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter address"
-            value={address}
-            required
-            onChange={(e) => setAddress(e.target.value)}
-            className="app-form-control-custom"
-          ></Form.Control>
-        </FormGroup>
-        <FormGroup controlId="city" className="my-2">
-          <Form.Label className="fw-bold">City</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter city"
-            value={city}
-            required
-            onChange={(e) => setCity(e.target.value)}
-            className="app-form-control-custom"
-          ></Form.Control>
-        </FormGroup>
-        <FormGroup controlId="postalcode" className="my-2">
-          <Form.Label className="fw-bold">Postal Code</Form.Label>
-          <Form.Control
-            type="text"
-            required
-            placeholder="Enter postal code"
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
-            className="app-form-control-custom"
-          ></Form.Control>
-        </FormGroup>
-        <FormGroup controlId="country" className="my-2">
-          <Form.Label className="fw-bold">Country</Form.Label>
-          <Form.Control
-            type="text"
-            required
-            placeholder="Enter country"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            className="app-form-control-custom"
-          ></Form.Control>
-        </FormGroup>
-        <Button
-          type="submit"
-          variant="primary"
-          className="my-2 w-100 app-auth-btn-custom"
+      <FormContainer>
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
         >
-          Continue
-        </Button>
-      </Form>
-    </FormContainer>
+          <h1
+            className="text-center mb-4"
+            style={{ fontFamily: "'Outfit', sans-serif", letterSpacing: "-0.02em" }}
+          >
+            Shipping
+          </h1>
+
+          <Form onSubmit={submitHandler}>
+            <Form.Group controlId="address" className="my-3">
+              <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Address</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Address"
+                value={address}
+                className="app-form-control-custom"
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="city" className="my-3">
+              <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>City</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter City"
+                value={city}
+                className="app-form-control-custom"
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="postalCode" className="my-3">
+              <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Postal Code</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Postal Code"
+                value={postalCode}
+                className="app-form-control-custom"
+                onChange={(e) => setPostalCode(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="country" className="my-3 mb-4">
+              <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Country</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Country"
+                value={country}
+                className="app-form-control-custom"
+                onChange={(e) => setCountry(e.target.value)}
+              />
+            </Form.Group>
+
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button type="submit" className="app-auth-btn-custom w-100">
+                Continue
+              </Button>
+            </motion.div>
+          </Form>
+        </motion.div>
+      </FormContainer>
+    </>
   );
 };
 
