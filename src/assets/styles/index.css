@@ -73,7 +73,9 @@
 }
 
 /* ---------- Base Styles ---------- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -89,7 +91,12 @@ body {
 }
 
 /* ---------- Typography ---------- */
-h1, h2, h3, h4, h5, h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 .app-section-heading,
 .app-auth-heading {
   font-family: var(--font-heading);
@@ -99,10 +106,22 @@ h1, h2, h3, h4, h5, h6,
   line-height: 1.2;
 }
 
-h1 { font-size: 2.5rem; font-weight: 800; }
-h2 { font-size: 1.75rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
 
 .text-muted,
 .text-secondary,
@@ -508,8 +527,15 @@ a:hover {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 /* Dropdown Menu */
@@ -708,7 +734,7 @@ a:hover {
 
 /* ---------- Hero Section ---------- */
 .app-hero-section {
-  background: linear-gradient(135deg, #000000 0%, #111111 50%, #1a1a1a 100%);
+  background: black;
   border-radius: 0 0 2.5rem 2.5rem;
   position: relative;
   overflow: hidden;
@@ -1022,7 +1048,8 @@ a:hover {
   overflow: hidden;
 }
 
-.table-black, thead.text-white.bg-black {
+.table-black,
+thead.text-white.bg-black {
   background: var(--color-primary) !important;
 }
 
@@ -1044,11 +1071,11 @@ thead.bg-black.rounded {
   background: var(--color-primary) !important;
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) > * {
+.table-striped>tbody>tr:nth-of-type(odd)>* {
   background-color: var(--color-surface);
 }
 
-.table-hover > tbody > tr:hover > * {
+.table-hover>tbody>tr:hover>* {
   background-color: var(--color-accent-light);
 }
 
@@ -1322,8 +1349,13 @@ thead.bg-black.rounded {
 }
 
 @media (max-width: 768px) {
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.5rem; }
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
 
   .app-checkout-steps {
     padding: 15px;
@@ -1397,7 +1429,9 @@ thead.bg-black.rounded {
 }
 
 @media (max-width: 576px) {
-  h1 { font-size: 1.75rem; }
+  h1 {
+    font-size: 1.75rem;
+  }
 
   .app-checkout-step-link,
   .app-checkout-step-disabled {
@@ -1517,6 +1551,11 @@ thead.bg-black.rounded {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
