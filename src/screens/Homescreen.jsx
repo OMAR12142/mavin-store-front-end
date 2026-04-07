@@ -92,75 +92,8 @@ export const Homescreen = () => {
                       className="mb-4"
                     >
                       <motion.div variants={cardVariants} className="h-100 d-flex">
-                        <div
-                          className="card border-0 h-100 w-100"
-                          style={{
-                            borderRadius: "20px",
-                            boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
-                            overflow: "hidden",
-                            transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
-                          }}
-                        >
-                          <div
-                            className="position-relative"
-                            style={{ height: "250px", overflow: "hidden" }}
-                          >
-                            <img
-                              src={product.image}
-                              alt={product.name}
-                              className="card-img-top h-100 w-100"
-                              style={{
-                                objectFit: "cover",
-                                transition: "transform 0.5s ease",
-                              }}
-                            />
-                          </div>
-                          <div className="card-body d-flex flex-column p-4">
-                            <h5
-                              className="card-title fw-bold mb-3"
-                              style={{
-                                color: "#000",
-                                fontFamily: "'Inter', sans-serif",
-                                fontSize: "0.95rem",
-                              }}
-                            >
-                              {product.name.length > 40
-                                ? product.name.substring(0, 40) + "..."
-                                : product.name}
-                            </h5>
-                            <div className="mt-auto">
-                              <div className="d-flex justify-content-between align-items-center mb-3">
-                                <span
-                                  className="h4 mb-0 fw-bold"
-                                  style={{
-                                    color: "#000",
-                                    fontFamily: "'Outfit', sans-serif",
-                                  }}
-                                >
-                                  ${product.price}
-                                </span>
-                              </div>
-                              <motion.div
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                              >
-                                <Link
-                                  to={`/product/${product._id}`}
-                                  className="btn w-100 py-2 text-decoration-none"
-                                  style={{
-                                    background: "#000",
-                                    color: "#D4AF37",
-                                    borderRadius: "20px",
-                                    fontWeight: 600,
-                                    border: "none",
-                                    transition: "all 0.3s",
-                                  }}
-                                >
-                                  View Details
-                                </Link>
-                              </motion.div>
-                            </div>
-                          </div>
+                        <div className="w-100">
+                          <Product product={product} />
                         </div>
                       </motion.div>
                     </Col>

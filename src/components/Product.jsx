@@ -1,64 +1,139 @@
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Rating from "./Rating";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../slices/cartSlice";
+import { toast } from "react-toastify";
 
 export const Product = ({ product }) => {
+  const dispatch = useDispatch();
+
+  const addToCartHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (product.countInStock > 0) {
+      dispatch(addToCart({ ...product, quantity: 1 }));
+      toast.success(`${product.name} added to cart`);
+    }
+  };
+
   return (
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      style={{ height: "100%" }}
-    >
-      <Card className="app-product-card border-0 h-100 w-100">
+    <motion.div className="h-100 d-flex">
+      <div
+        className="card border-0 h-100 w-100 app-product-card"
+        style={{
+          borderRadius: "20px",
+          boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+          overflow: "hidden",
+          transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
+        }}
+      >
         <Link to={`/product/${product._id}`} className="text-decoration-none">
-          <div style={{ overflow: "hidden", borderRadius: "20px 20px 0 0" }}>
-            <Card.Img
+          <div
+            className="position-relative"
+            style={{ height: "250px", overflow: "hidden" }}
+          >
+            <img
               src={product.image}
-              variant="top"
-              className="card-image-custom w-100"
+              alt={product.name}
+              className="card-img-top h-100 w-100"
               style={{
-                height: "200px",
-                objectFit: "contain",
+                objectFit: "cover",
+                transition: "transform 0.5s ease",
               }}
             />
           </div>
         </Link>
 
-        <Card.Body className="p-3 d-flex flex-column h-100">
+        <div className="card-body d-flex flex-column p-4">
           <Link
             to={`/product/${product._id}`}
-            className="text-decoration-none text-black flex-grow-1 d-flex flex-column"
+            className="text-decoration-none text-black"
           >
-            <Card.Title
-              as="div"
-              className="product-title-custom fw-bold mb-2 fs-6 lh-sm"
+            <h5
+              className="card-title fw-bold mb-2"
               style={{
-                minHeight: "48px",
+                color: "#000",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.95rem",
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
+                minHeight: "44px",
               }}
             >
-              {product.name.substring(0, 50)}
-            </Card.Title>
+              {product.name}
+            </h5>
           </Link>
 
-          <div className="app-product-rating mb-2">
+          <div className="mb-3">
             <Rating value={product.rating} />
           </div>
 
-          <div className="mt-auto pt-2">
-            <Card.Text
-              as="h5"
-              className="app-product-price text-black fw-bold mb-0 fs-5"
-            >
-              $ {product.price}
-            </Card.Text>
+          <div className="mt-auto">
+            <div className="mb-3">
+              <span
+                className="h4 mb-0 fw-bold"
+                style={{
+                  color: "#000",
+                  fontFamily: "'Outfit', sans-serif",
+                }}
+              >
+                ${product.price}
+              </span>
+            </div>
+
+            <div className="d-flex flex-column gap-2 flex-xl-row">
+              <motion.div
+                className="flex-grow-1"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Link
+                  to={`/product/${product._id}`}
+                  className="btn w-100 py-2 text-decoration-none d-flex align-items-center justify-content-center"
+                  style={{
+                    background: "#000",
+                    color: "#D4AF37",
+                    borderRadius: "20px",
+                    fontWeight: 600,
+                    border: "none",
+                    transition: "all 0.3s",
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  <i className="fas fa-eye me-2"></i> Details
+                </Link>
+              </motion.div>
+
+              <motion.div
+                className="flex-grow-1"
+                whileHover={product.countInStock > 0 ? { scale: 1.02 } : {}}
+                whileTap={product.countInStock > 0 ? { scale: 0.98 } : {}}
+              >
+                <Button
+                  className="btn w-100 py-2 d-flex align-items-center justify-content-center"
+                  onClick={addToCartHandler}
+                  disabled={product.countInStock === 0}
+                  style={{
+                    background: "#000",
+                    color: "#D4AF37",
+                    borderRadius: "20px",
+                    fontWeight: 600,
+                    border: "none",
+                    transition: "all 0.3s",
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  <i className="fas fa-shopping-cart me-2"></i> Add
+                </Button>
+              </motion.div>
+            </div>
           </div>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     </motion.div>
   );
 };
