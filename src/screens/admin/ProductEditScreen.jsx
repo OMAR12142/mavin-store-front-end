@@ -91,120 +91,120 @@ const ProductEditScreen = () => {
 
       <FormContainer>
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45 }}
         >
-          <Card className="border-0 shadow-lg" style={{ borderRadius: '20px', overflow: 'hidden' }}>
-            <Card.Header className="py-4 text-center" style={{ background: '#000' }}>
-              <h2 className="mb-0" style={{ color: '#D4AF37', fontFamily: "'Outfit', sans-serif" }}>Edit Product</h2>
-            </Card.Header>
-            <Card.Body className="p-4 px-lg-5">
-              {loadingUpdate && <Loader />}
-              {isLoading ? (
-                <Loader />
-              ) : error ? (
-                <Message variant="danger">{error?.data?.message || error.error}</Message>
-              ) : (
-                <Form onSubmit={submitHandler}>
-                  <Form.Group controlId="name" className="mb-4">
-                    <Form.Label className="fw-bold small text-uppercase">Name</Form.Label>
-                    <Form.Control
-                      type="name"
-                      placeholder="Enter name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="app-form-control-custom"
-                    />
-                  </Form.Group>
+          <h1
+            className="app-auth-heading text-center mb-4"
+            style={{ fontFamily: "'Outfit', sans-serif", letterSpacing: "-0.02em" }}
+          >
+            Edit Product
+          </h1>
 
-                  <Form.Group controlId="price" className="mb-4">
-                    <Form.Label className="fw-bold small text-uppercase">Price</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Enter price"
-                      value={price}
-                      onChange={(e) => setPrice(Number(e.target.value))}
-                      className="app-form-control-custom"
-                    />
-                  </Form.Group>
+          {loadingUpdate && <Loader />}
+          {isLoading ? (
+            <Loader />
+          ) : error ? (
+            <Message variant="danger">{error?.data?.message || error.error}</Message>
+          ) : (
+            <Form onSubmit={submitHandler}>
+              <Form.Group controlId="name" className="my-3 mb-4">
+                <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Name</Form.Label>
+                <Form.Control
+                  type="name"
+                  placeholder="Enter name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="app-form-control-custom"
+                />
+              </Form.Group>
 
-                  <Form.Group controlId="image" className="mb-4">
-                    <Form.Label className="fw-bold small text-uppercase">Image URL</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter image URL"
-                      value={image}
-                      onChange={(e) => setImage(e.target.value)}
-                      className="app-form-control-custom mb-2"
-                    />
-                    <Form.Control
-                      type="file"
-                      label="Choose File"
-                      onChange={uploadFileHandler}
-                      className="app-form-control-custom"
-                    />
-                    {loadingUpload && <Loader />}
-                  </Form.Group>
+              <Form.Group controlId="price" className="my-3 mb-4">
+                <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter price"
+                  value={price}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                  className="app-form-control-custom"
+                />
+              </Form.Group>
 
-                  <Form.Group controlId="brand" className="mb-4">
-                    <Form.Label className="fw-bold small text-uppercase">Brand</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter brand"
-                      value={brand}
-                      onChange={(e) => setBrand(e.target.value)}
-                      className="app-form-control-custom"
-                    />
-                  </Form.Group>
+              <Form.Group controlId="image" className="my-3 mb-4">
+                <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Image URL</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter image URL"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  className="app-form-control-custom mb-3"
+                />
+                <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Upload Image</Form.Label>
+                <Form.Control
+                  type="file"
+                  label="Choose File"
+                  onChange={uploadFileHandler}
+                  className="app-form-control-custom"
+                />
+                {loadingUpload && <Loader />}
+              </Form.Group>
 
-                  <Form.Group controlId="countInStock" className="mb-4">
-                    <Form.Label className="fw-bold small text-uppercase">Count In Stock</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Enter countInStock"
-                      value={countInStock}
-                      onChange={(e) => setCountInStock(Number(e.target.value))}
-                      className="app-form-control-custom"
-                    />
-                  </Form.Group>
+              <Form.Group controlId="brand" className="my-3 mb-4">
+                <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Brand</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter brand"
+                  value={brand}
+                  onChange={(e) => setBrand(e.target.value)}
+                  className="app-form-control-custom"
+                />
+              </Form.Group>
 
-                  <Form.Group controlId="category" className="mb-4">
-                    <Form.Label className="fw-bold small text-uppercase">Category</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter category"
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value)}
-                      className="app-form-control-custom"
-                    />
-                  </Form.Group>
+              <Form.Group controlId="countInStock" className="my-3 mb-4">
+                <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Count In Stock</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter countInStock"
+                  value={countInStock}
+                  onChange={(e) => setCountInStock(Number(e.target.value))}
+                  className="app-form-control-custom"
+                />
+              </Form.Group>
 
-                  <Form.Group controlId="description" className="mb-5">
-                    <Form.Label className="fw-bold small text-uppercase">Description</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={4}
-                      placeholder="Enter description"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      className="app-form-control-custom"
-                    />
-                  </Form.Group>
+              <Form.Group controlId="category" className="my-3 mb-4">
+                <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Category</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="app-form-control-custom"
+                />
+              </Form.Group>
 
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button
-                      type="submit"
-                      className="w-100 app-auth-btn-custom py-3"
-                      style={{ borderRadius: '15px', fontWeight: '800' }}
-                    >
-                      UPDATE PRODUCT
-                    </Button>
-                  </motion.div>
-                </Form>
-              )}
-            </Card.Body>
-          </Card>
+              <Form.Group controlId="description" className="my-3 mb-5">
+                <Form.Label className="fw-bold" style={{ fontSize: "0.9rem" }}>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={4}
+                  placeholder="Enter description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="app-form-control-custom"
+                />
+              </Form.Group>
+
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Button
+                  type="submit"
+                  className="w-100 app-auth-btn-custom mt-2"
+                >
+                  Update Product
+                </Button>
+              </motion.div>
+            </Form>
+          )}
         </motion.div>
       </FormContainer>
     </>
