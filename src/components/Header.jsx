@@ -99,7 +99,7 @@ const Header = () => {
                       >
                         <Badge
                           pill
-                          className="app-cart-badge position-absolute top-0 start-100 translate-middle d-flex align-items-center justify-content-center"
+                          className="app-cart-badge text-white position-absolute top-0 start-100 translate-middle d-flex align-items-center justify-content-center"
                           style={{
                             minWidth: "20px",
                             height: "20px",
